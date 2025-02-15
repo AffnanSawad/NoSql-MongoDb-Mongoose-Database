@@ -1,0 +1,93 @@
+// inserting one Data 
+
+// db.test.insertOne(   { name : 'Affnan Sawad , age : 27 } )
+
+
+// inserting many  Data 
+
+// db.test.insertMany( [   { name : 'Affnan Sawad , age : 27 } , {name : 'Jawad' , age : 22 }   ]  )
+
+
+// find data from the database 
+
+// db.test.find(   { gender : male }  ) 
+
+//  if some one want to find the name , age who are Male . => this is called field filtering
+
+//   db.test.find(   { gender : male } , { name : 1 , age : 1 }  ) ;
+
+//  findOne use korle just ekta data show korbe .
+
+
+//  using operators : eq , Neq , GT, LT , GTE , LTE etc 
+
+//  db.test.find(  {  gender :  { $eq : "Male"}  } , { name: 1 , age: 1 , email: 1   }     ).sort( {age: 1 })
+
+//  Sort : 1 mane asceding order . -1 mane descending order
+
+
+//  db.test.find( { age : { $gte : 20} } , {email : 1 , age : 1 , gender : 1 }    ).sort( {age: 1 })
+
+
+//  Show me the data  : whoose are femail and age < 80 , age > 18
+
+//  db.test.find( { gender : {$eq : "Female"}  , age : {$gt : 18 , $lt : 80} } , {email: 1 , age : 1 , gender : 1}   ).sort({age : 1 })
+
+
+
+//  Show me the data  : whoose are femail and age 23 , 25 , 27 , 29 .
+// That means specific ages , so  ekhane $in / $nin use hobe. Array must asbe.
+ 
+//  $in = condition er moddher gula
+// $nin = condition er bahirer gula
+
+//  db.test.find( { gender : {$eq : "Female"}  , age : {$in : [23,25,27,29]} } , {email: 1 , age : 1 , gender : 1}   ).sort({age : 1 })
+
+
+
+//  $and , $or , $not , $nor => multiple conditions apply er jnno.
+
+//  db.test.find(  { $and : [
+//     { gender : { $eq : 'Female' }},
+      
+//     {   age : { $lt : 80 , $gt : 18    }}
+ 
+
+//     ]      } , { name : 1 , age : 1 , gender : 1 , email : 1}  ).sort({age : 1})
+
+
+
+
+//  $exists => kono property exists kore kina tar jnno
+//  $type => property value er type select kore segula ber kora
+//  $size => property value er size select kore segula show kora.
+
+// db.test.find( { age : {$exists : true  }}   ) 
+//  db.test.find( { age : { $type : 'number' }  }   )
+//  db.test.find(  {  skilss : { $size : 2  }  }    )
+
+
+//  Array theke specific value jate always thake emon pete hole $all use hoi. 
+
+
+//  db.test.find( skilss : { $all : ['html', 'css' , 'js' , 'node']}  )
+
+
+
+
+//  ekta property update kora : like age er value change kora.
+//  id diye kake update krbo take selct korte hoi. then ki ki change korte hoi ta krte hoi $set diye
+
+
+//  db.test.updateOne( {  _id :  ObjectId : 1221w913} ,
+ 
+// {   $set :     { age : 30 }  , { email : abc@gmail.com}   }
+
+
+// )
+
+
+
+//  $set => ager value delete hoye new value add kobe.
+//  $addtoset => ager valuer sathe new value add hobe . bt duplicate value asbe na.
+// $push =>  duplicate value o add hbe 
