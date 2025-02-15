@@ -91,3 +91,27 @@
 //  $set => ager value delete hoye new value add kobe.
 //  $addtoset => ager valuer sathe new value add hobe . bt duplicate value asbe na.
 // $push =>  duplicate value o add hbe 
+
+
+//  delete korar jnno .
+
+//  $unset : feild + feild er value soho delete hobe.
+//  $pop : just ekta value  delete gbe . 1 hole pichon theke , -1 hole samne theke.
+//  $pull : specific value dele kora jave .
+//  $pullAll : specificly more than one value delete kora jabe. [array er moddhe]
+
+
+// example : db.test.updateOne(  { _id : ObjectId("6406ad65fc13ae5a400000b4")  }  ,
+ 
+//   {  $unset : { friends : 1 }}
+
+// ) 
+
+
+//  delete korara jnno .
+//  db.test.deleteone( {_id : ObjectId('122121212') }  );
+
+
+
+//  ............ PRACTICE - MODULE - 5 : ALL QUERY ......... //
+
