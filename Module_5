@@ -1,99 +1,85 @@
-// inserting one Data 
 
-// db.test.insertOne(   { name : 'Affnan Sawad , age : 27 } )
+//  ............ PRACTICE - MODULE - 5 : ALL QUERY ......... //
 
+// insert One Data
+db.test.insertOne({ name : 'Affnan Sawad' , age : 22 , gender : 'Male'})
 
-// inserting many  Data 
-
-// db.test.insertMany( [   { name : 'Affnan Sawad , age : 27 } , {name : 'Jawad' , age : 22 }   ]  )
-
-
-// find data from the database 
-
-// db.test.find(   { gender : male }  ) 
-
-//  if some one want to find the name , age who are Male . => this is called field filtering
-
-//   db.test.find(   { gender : male } , { name : 1 , age : 1 }  ) ;
-
-//  findOne use korle just ekta data show korbe .
+//  insert many data . must be in Array
+db.test.insertMany( [ 
+    
+    {  name : 'Mamdud Sawad' , age : 20 , gender : 'Male'  }  , 
+    
+    {  name : 'Afrin Sawad' , age : 1 , gender : 'Female' } ,
+    
+    { name : 'Affsan Sawad' , age : 2 , gender : 'Male'  } 
+    
+    
+    ])
 
 
-//  using operators : eq , Neq , GT, LT , GTE , LTE etc 
-
-//  db.test.find(  {  gender :  { $eq : "Male"}  } , { name: 1 , age: 1 , email: 1   }     ).sort( {age: 1 })
-
-//  Sort : 1 mane asceding order . -1 mane descending order
+    //  Find for one Condition and show name , age , gender and sort it
+    db.test.find({ age : 40  } , { name : 1 , email : 1 , age : 1 , gender : 1 } ).sort({age : 1 })
 
 
-//  db.test.find( { age : { $gte : 20} } , {email : 1 , age : 1 , gender : 1 }    ).sort( {age: 1 })
+    //  find by multiple conditions and show name , age , gender and short by age in asceding order
+
+    db.test.find( { gender : 'Female' , age : 1  } , { name : 1 , age : 1 , gender : 1 }  ).sort({age : 1})
+
+    //  applying Conditions by using Operators : $eq , $gt etc.
+    db.test.find({  "name.firstName" : { $eq: "Mariele"   } , "name.lastName" : {$eq: "Dangl" }    } , {name : 1 , age :1 }  ).sort({age:1})
 
 
-//  Show me the data  : whoose are femail and age < 80 , age > 18
+// find that data where age > 18 , age < 100 and gender is "Male" 
 
-//  db.test.find( { gender : {$eq : "Female"}  , age : {$gt : 18 , $lt : 80} } , {email: 1 , age : 1 , gender : 1}   ).sort({age : 1 })
-
-
-
-//  Show me the data  : whoose are femail and age 23 , 25 , 27 , 29 .
-// That means specific ages , so  ekhane $in / $nin use hobe. Array must asbe.
- 
-//  $in = condition er moddher gula
-// $nin = condition er bahirer gula
-
-//  db.test.find( { gender : {$eq : "Female"}  , age : {$in : [23,25,27,29]} } , {email: 1 , age : 1 , gender : 1}   ).sort({age : 1 })
+db.test.find( {  age : { $gt : 18 , $lt : 100 } , gender : { $eq : "Male" }   }   ,     { name : 1 , age : 1 , email :1 , gender : 1} ).sort({age : 1})
 
 
+//  specific kono Field er Values dekate hole or na dekate hole : $in / $nin use hoi.
 
-//  $and , $or , $not , $nor => multiple conditions apply er jnno.
+// { field: { $in / $nin: [<value1>, <value2>, ... <valueN> ] } }
 
-//  db.test.find(  { $and : [
-//     { gender : { $eq : 'Female' }},
-      
-//     {   age : { $lt : 80 , $gt : 18    }}
- 
+db.test.find( { interests :  { $in : [ "Cooking" , "Gaming"] }   } ,  {age : 1 , interests : 1 }   )
 
-//     ]      } , { name : 1 , age : 1 , gender : 1 , email : 1}  ).sort({age : 1})
+db.test.find( { interests :  { $nin : [ "Cooking" , "Gaming" , "Writing"] }   } ,  {age : 1 , interests : 1 }   )
 
+//  Conditions Operators : $and , $or etc .
 
+// { $and: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] }
 
-
-//  $exists => kono property exists kore kina tar jnno
-//  $type => property value er type select kore segula ber kora
-//  $size => property value er size select kore segula show kora.
-
-// db.test.find( { age : {$exists : true  }}   ) 
-//  db.test.find( { age : { $type : 'number' }  }   )
-//  db.test.find(  {  skilss : { $size : 2  }  }    )
+db.test.find(  { $and : [ 
+    
+    {  age : { $gt : 20 , $lt : 50 }  }  ,  { gender : 'Male'}  
+    
+    ]   }      , {age : 1 , gender : 1 , interests : 1})
 
 
-//  Array theke specific value jate always thake emon pete hole $all use hoi. 
+    //  $exist = check kore feild ta ase naki nai.
+    db.test.find( { age : { $exists : true}   }  )
+
+    //  $type : Kono field e Specificc type variable pete hole.
+    db.test.find( { age : { $type : "number"  }      } )
+
+    //  ........ Update ..........
+
+    //  update : kake update , ki update .
+    
+    // $set : ager value delete hoye update value bosbe,
+    // $addtoSet : ager value gular sathe new value add hbe . [ duplicate value chara]
+    //  $push : duplicate value o add hote parbe ager value er sathe.
 
 
-//  db.test.find( skilss : { $all : ['html', 'css' , 'js' , 'node']}  )
+    db.test.updateOne( { _id : ObjectId("6406ad63fc13ae5a40000065")     } , { $set : {  age : 20 , gender : 'Female' }   }   )
 
 
+    db.test.updateOne( { _id : ObjectId("6406ad63fc13ae5a40000065")     } , { $addToSet: { friends : ['Affnan Sawad' , 'Mamdud Sawad'] }   }   )
+
+    db.test.updateOne( { _id : ObjectId("6406ad63fc13ae5a40000065")     } , { $push: { friends : ['Affnan Sawad' , 'Mamdud Sawad'] }   }   )
 
 
-//  ekta property update kora : like age er value change kora.
-//  id diye kake update krbo take selct korte hoi. then ki ki change korte hoi ta krte hoi $set diye
+    //  ........ DELETE .............
 
 
-//  db.test.updateOne( {  _id :  ObjectId : 1221w913} ,
- 
-// {   $set :     { age : 30 }  , { email : abc@gmail.com}   }
-
-
-// )
-
-
-
-//  $set => ager value delete hoye new value add kobe.
-//  $addtoset => ager valuer sathe new value add hobe . bt duplicate value asbe na.
-// $push =>  duplicate value o add hbe 
-
-
-//  delete korar jnno .
+    //  delete korar jnno .
 
 //  $unset : feild + feild er value soho delete hobe.
 //  $pop : just ekta value  delete gbe . 1 hole pichon theke , -1 hole samne theke.
@@ -101,17 +87,19 @@
 //  $pullAll : specificly more than one value delete kora jabe. [array er moddhe]
 
 
-// example : db.test.updateOne(  { _id : ObjectId("6406ad65fc13ae5a400000b4")  }  ,
+ db.test.updateOne(  { _id : ObjectId("6406ad65fc13ae5a400000b4")  }  ,
  
-//   {  $unset : { friends : 1 }}
+  {  $unset : { friends : 1 }}
 
-// ) 
-
-
-//  delete korara jnno .
-//  db.test.deleteone( {_id : ObjectId('122121212') }  );
+) 
 
 
+db.test.find(  { _id :ObjectId("6406ad63fc13ae5a40000065")   }  , 
+  
+{ $pull : { languages : 'German' } }
 
-//  ............ PRACTICE - MODULE - 5 : ALL QUERY ......... //
+) 
 
+
+// specificly whole Document delete korara jnno .
+ db.test.deleteone( {_id : ObjectId('122121212') }  );
