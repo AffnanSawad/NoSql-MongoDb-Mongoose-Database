@@ -1,0 +1,12 @@
+// ............. Module - 6 (MongoDB Aggregation & Indexing) ................//
+
+ // Aggregation : Database er Data gula ke Sort kora , limit kora , conditionally choose kora, calculate kora etc. Egula Step By Step Implement kora ke Aggregation Bole.
+
+ // Syntext : db.test.aggregate(  
+
+     [
+        { stage 1 },
+        { stage 2 },
+        { stage 3 }
+     ]
+ )
