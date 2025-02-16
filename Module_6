@@ -2,7 +2,8 @@
 
  // Aggregation : Database er Data gula ke Sort kora , limit kora , conditionally choose kora, calculate kora etc. Egula Step By Step Implement kora ke Aggregation Bole.
 
- // Syntext : db.test.aggregate(  
+ // Syntext :
+   db.test.aggregate(  
 
      [
         { stage 1 },
@@ -10,3 +11,141 @@
         { stage 3 }
      ]
  )
+
+
+// Find VS Aggregation : Same bt aggregate has more credibility .
+
+ // Match conditions & project filtering & sorting :
+
+ db.test.aggregate(  [
+    //Stage : 1 : 
+     
+     { $match: { age : {$lt : 50} , gender : 'Male'   }  },
+    
+    //  Stage 2 : show the data's :
+    
+    { $project: {  email : 1 , gender : 1 , age : 1   }      },
+    
+    { $sort : {age : 1} }
+    
+    ] )
+
+
+    //  New Data Property and Value Database e ADD kora : 3 ways :-
+   
+    // $addfields : just add hobe , kintu Original databse e add kobe na.
+    //  $out : new data_collection create korbe , and sekane add korbe.
+    //  $merge : Current database er collection e add korbe.
+   
+    // $addfields :
+    db.test.aggregate(  [
+        //Stage : 1 : 
+         
+        { $addFields: { role : 'Developer' , type : 'Full-Stack' }    },
+        
+       { $project: {email : 1 , role : 1 , type : 1 , age : 1}  }
+        
+        ] )
+
+
+        // $out :
+        db.test.aggregate(  [
+            //Stage : 1 : 
+             
+            { $addFields: { role : 'Developer' , type : 'Full-Stack' }    },
+            
+           { $project: {email : 1 , role : 1 , type : 1 , age : 1}  } , 
+           
+           { $out:'new-test' }
+            
+            ] )
+
+
+            //  $merge :
+
+            db.test.aggregate(  [
+                //Stage : 1 : 
+                 
+                { $addFields: { role : 'Developer' , type : 'Full-Stack' }    },
+                
+               { $project: {email : 1 , role : 1 , type : 1 , age : 1}  } , 
+               
+               { $merge:'test' }
+                
+             ] ) 
+             
+            //  To see output : db.test.find( {age : {$gt:0} } , { role : 1 , type : 1 } )
+
+
+
+            //  GROUP : Kono kichur upor Depend kore Data Group banano .
+
+            db.test.aggregate([ 
+    
+                //   stage : 1 : country er upor depend kore group kora
+                
+                { $group: { _id: "$address.country"  ,
+                
+                    count : { $sum: 1 } ,
+                    
+                    fullDoc: { $push : "$$ROOT" }
+                }
+                },
+                
+                // show data
+               {  $project: { "fullDoc.name": 1 , "fullDoc.email": 1 , "fullDoc.gender": 1 }  }
+                
+                
+                
+                ])
+
+                // Whole doc er salary: max , min , diff of max -min , avrg
+
+                db.test.aggregate([
+    
+                    { 
+                        
+                        $group: { _id: null ,
+                        
+                        maxSalary : { $max: "$salary"   },
+                        minSalary : {$min : "$salary"},
+                        TotalSalary : {$sum : "$salary"},
+                        AverageSalary : {$avg: "$salary"}
+                }
+                    } ,
+                    
+                    {
+                        $project: {
+                            maxSalary : 1 ,
+                            minSalary : 1 ,
+                            TotalSalary : 1 ,
+                            AverageSalary : 1 ,
+                            DiffMaxMin : { $subtract: [ "$maxSalary", "$minSalary"] }
+                        }
+                    }
+                
+                    
+                    
+                    ])
+
+
+                    //  $ bucket : Kono specific ranger er moddhe value gulake select kore .
+
+                    db.test.aggregate([
+    
+                        {
+                            $bucket: {
+                                  groupBy: "$age",
+                                  boundaries: [ 20 , 40 ,60,80 ],
+                                  default: "80 + old people's",
+                                  output: {
+                                    "count": { $sum: 1 },
+                                    "Email" : { $push: "$email" }
+                                  }
+                            }
+                            
+                        }])
+
+
+
+                        // END //
