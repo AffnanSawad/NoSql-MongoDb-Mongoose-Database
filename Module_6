@@ -3,14 +3,14 @@
  // Aggregation : Database er Data gula ke Sort kora , limit kora , conditionally choose kora, calculate kora etc. Egula Step By Step Implement kora ke Aggregation Bole.
 
  // Syntext :
-   db.test.aggregate(  
+//    db.test.aggregate(  
 
-     [
-        { stage 1 },
-        { stage 2 },
-        { stage 3 }
-     ]
- )
+//      [
+//         { stage 1 },
+//         { stage 2 },
+//         { stage 3 }
+//      ]
+//  )
 
 
 // Find VS Aggregation : Same bt aggregate has more credibility .
