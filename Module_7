@@ -1,2 +1,328 @@
 //    Basics & Advanced Level Of Node JS & Express JS   //
 
+NODE JS : Its a server side run time language which is used in server side. 
+
+<!-- ### **Modules in Node.js**   -->
+A **module** in Node.js is a reusable piece of code that can be imported and exported between files. There are two main module systems:  
+
+1. **CommonJS (CJS)** – The default module system in Node.js.  
+2. **ECMAScript Modules (ESM)** – The modern JavaScript module system.
+
+---
+
+### **1. CommonJS (CJS)**
+- Uses `require()` to import modules.
+- Uses `module.exports` or `exports` to export modules.
+- Synchronous loading (good for backend).
+
+#### **Example of CommonJS**
+##### `math.js` (Exporting)
+```js
+// CommonJS module
+function add(a, b) {
+    return a + b;
+}
+
+module.exports = { add };
+```
+
+##### `app.js` (Importing)
+```js
+// Importing CommonJS module
+const math = require('./math');
+
+console.log(math.add(2, 3)); // Output: 5
+```
+
+---
+
+### **2. ECMAScript Modules (ESM)**
+- Uses `import` and `export`.
+- Asynchronous loading (better for performance).
+- Needs `"type": "module"` in `package.json` or using `.mjs` extension.
+
+#### **Example of ESM**
+##### `math.mjs` (Exporting)
+```js
+// ECMAScript Module
+export function add(a, b) {
+    return a + b;
+}
+```
+
+##### `app.mjs` (Importing)
+```js
+// Importing ESM module
+import { add } from './math.mjs';
+
+console.log(add(2, 3)); // Output: 5
+```
+
+---
+
+### **Key Differences: CommonJS vs ESM**
+| Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
+|---------|--------------|------------------|
+| Syntax  | `require()` / `module.exports` | `import` / `export` |
+| Execution | Synchronous | Asynchronous |
+| Default in Node.js | Yes | No (must enable in `package.json`) |
+| Use Case | Server-side scripts | Modern JavaScript, Frontend & Backend |
+
+#### **When to Use What?**
+- **Use CommonJS** if working with legacy Node.js projects or dependencies that require it.  
+- **Use ESM** for modern projects, especially if you need tree-shaking and better performance.  
+
+Let me know if you need further clarification! 🚀
+
+
+
+
+
+<!-- // File System : Synchronous VS Asynchronous . -->
+
+### **File System (fs) Module in Node.js**  
+The `fs` module allows reading and writing files in **synchronous** (blocking) and **asynchronous** (non-blocking) ways.
+
+---
+
+### **1️⃣ Synchronous (Blocking)**
+- Code waits for file operation to complete.
+- Simple but slows down execution.
+
+#### **Read & Write (Synchronous)**
+```js
+const fs = require('fs');
+
+// Writing to a file (Sync)
+fs.writeFileSync('file.txt', 'Hello, World!');
+
+// Reading from a file (Sync)
+const data = fs.readFileSync('file.txt', 'utf8');
+console.log(data);
+
+console.log('This runs after file reading.');
+```
+🔹 **Output:**  
+```
+Hello, World!
+This runs after file reading.
+```
+
+✔ Blocks execution until reading/writing is done.
+
+---
+
+### **2️⃣ Asynchronous (Non-blocking)**
+- Does **not** wait for completion.
+- Uses **callbacks** or **Promises** for handling operations.
+
+#### **Read & Write (Asynchronous)**
+```js
+const fs = require('fs');
+
+// Writing to a file (Async)
+fs.writeFile('file.txt', 'Hello, Async!', (err) => {
+    if (err) throw err;
+    console.log('File written successfully!');
+});
+
+// Reading from a file (Async)
+fs.readFile('file.txt', 'utf8', (err, data) => {
+    if (err) throw err;
+    console.log(data);
+});
+
+console.log('This runs first!');
+```
+🔹 **Output:**  
+```
+This runs first!
+File written successfully!
+Hello, Async!
+```
+
+✔ Executes the next line without waiting.
+
+---
+
+### **Key Differences: Synchronous vs Asynchronous**
+| Feature | Synchronous | Asynchronous |
+| Execution | Blocking | Non-blocking |
+| Speed | Slower | Faster |
+| Uses | Small tasks | Large files & servers |
+
+✅ **Use Sync** for simple tasks.  
+✅ **Use Async** for better performance in large applications.  
+
+
+
+<!--   Event driven architecture, create your own events -->
+
+
+### **Event-Driven Architecture in Node.js**
+
+In Node.js, everything works around **events**. The core concept of an event-driven architecture is that code execution is driven by events, like user actions, messages, or system triggers. Node.js uses the **EventEmitter** class for this.
+
+---
+
+### **Creating Your Own Events in Node.js**
+
+You can create custom events in Node.js by using the `EventEmitter` class from the `events` module.
+
+#### **Steps:**
+1. **Import the `events` module**.
+2. **Create an instance of `EventEmitter`**.
+3. **Define your event with `on()`** (listener).
+4. **Trigger the event with `emit()`**.
+
+---
+
+### **Example of Creating Your Own Event**
+
+#### **1️⃣ Creating an Event (with `EventEmitter`)**
+
+```js
+const EventEmitter = require('events'); // Import EventEmitter class
+
+// Create an event emitter instance
+const myEmitter = new EventEmitter();
+
+// Define an event and its listener
+myEmitter.on('event', () => {
+    console.log('Event has been triggered!');
+});
+
+// Emit the event
+myEmitter.emit('event'); // Output: Event has been triggered!
+```
+
+---
+
+### **2️⃣ Passing Arguments with Events**
+
+You can also pass arguments when emitting events, and listeners can access those values.
+
+#### **Example: Passing Arguments**
+
+```js
+const EventEmitter = require('events'); // Import EventEmitter class
+
+// Create an event emitter instance
+const myEmitter = new EventEmitter();
+
+// Define an event with listener that accepts arguments
+myEmitter.on('greet', (name) => {
+    console.log(`Hello, ${name}!`);
+});
+
+// Emit the event with an argument
+myEmitter.emit('greet', 'Affnan'); // Output: Hello, Affnan!
+```
+
+---
+
+### **3️⃣ Using Multiple Listeners**
+
+You can have multiple listeners for the same event.
+
+#### **Example: Multiple Listeners**
+
+```js
+const EventEmitter = require('events'); // Import EventEmitter class
+
+// Create an event emitter instance
+const myEmitter = new EventEmitter();
+
+// Define multiple listeners for the same event
+myEmitter.on('event', () => {
+    console.log('Listener 1 triggered!');
+});
+
+myEmitter.on('event', () => {
+    console.log('Listener 2 triggered!');
+});
+
+// Emit the event
+myEmitter.emit('event');
+// Output:
+// Listener 1 triggered!
+// Listener 2 triggered!
+```
+
+---
+
+<!-- Stream and buffer, create your own server -->
+
+### **Streams and Buffers in Node.js**
+
+In Node.js, **Streams** and **Buffers** are fundamental for handling large data efficiently.
+
+---
+
+
+
+There are four types of streams:
+- **Readable streams** (e.g., reading files)
+- **Writable streams** (e.g., writing to files)
+- **Duplex streams** (both readable and writable)
+- **Transform streams** (modifies data as it is read or written)
+
+---
+
+### **3️⃣ Creating Your Own Server with Streams**
+
+In this example, we'll create a simple HTTP server using **streams** to handle incoming requests.
+
+#### **Example: Simple HTTP Server**
+
+```js
+const http = require('http'); // Import HTTP module
+const fs = require('fs'); // Import File System module
+
+const server = http.createServer((req, res) => {
+    // Creating a readable stream from a file
+    const readStream = fs.createReadStream('file.txt', 'utf8');
+
+    // Pipe the stream to the response (sending file data to the client)
+    readStream.pipe(res);
+});
+
+// Server listens on port 3000
+server.listen(5000, () => {
+    console.log('Server is running on http://localhost:5000');
+});
+```
+
+---
+
+### **4️⃣ Using Writable Stream (Writing Data)**
+
+Here’s an example of how you can write data to a file using writable streams.
+
+#### **Example: Write to File Using Stream**
+
+```js
+const fs = require('fs');
+
+// Create a writable stream
+const writeStream = fs.createWriteStream('output.txt');
+
+// Writing data to the file stream
+writeStream.write('Hello, Stream World!\n');
+writeStream.write('This is another line.\n');
+
+// End the stream
+writeStream.end(() => {
+    console.log('Data written to output.txt');
+});
+```
+
+---
+
+### **Summary**
+- **Buffer**: A temporary storage for raw binary data. Useful in I/O operations.
+- **Stream**: Allows data to be read or written in chunks. It's efficient for handling large amounts of data.
+- **Creating Server**: You can use streams to handle file I/O in an HTTP server.
+
+
+
